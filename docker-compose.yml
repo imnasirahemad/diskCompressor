@@ -1,0 +1,16 @@
+services:
+  ubuntu:
+    image: ubuntu:22.04
+    privileged: true
+    volumes:
+      - ./testNow.sh:/testNow.sh
+      - ./ext4_volume.img:/ext4_volume.img
+    command: >
+      bash -c "
+        apt-get update && 
+        apt-get install -y util-linux e2fsprogs lz4 &&
+        mkdir -p /mnt/ext4_volume &&
+        mount -o loop /ext4_volume.img /mnt/ext4_volume &&
+        bash /testNow.sh &&
+        tail -f /dev/null
+      "
